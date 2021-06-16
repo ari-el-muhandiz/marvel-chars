@@ -11,9 +11,7 @@
         "paths": {
             "*": [
                 "node_modules/*"
-            ],
-            "@services/*":["src/services/*"],
-            "@lib/*":["src/lib/*"]
+            ]
         }
     },
     "include": [

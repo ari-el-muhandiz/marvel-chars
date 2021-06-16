@@ -1,7 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
-import MarvelService, { requestDefault } from "@services/marvel.service";
-import MemoryCache from "@lib/cache";
+import MarvelService, { requestDefault } from "./services/marvel.service";
+import MemoryCache from "./lib/cache";
 import swaggerUi from 'swagger-ui-express';
 import YAML from 'yamljs';
 dotenv.config();
@@ -16,6 +16,17 @@ const swaggerDocument = YAML.load('./swagger.yaml');
 app.get('/', (req, res) => {
     res.send('Demo Marvel API')
 })
+
+/**
+ * The Cache strategy
+ * First the data will be fetched from the cache 
+ * if data exist in cache then return the data
+ * if data not exist then request to marvel api and save the data response in the cache.
+ * For the key, I use combination of chars-{offset(default 0)}-{limit(default 20)}.
+ * To handle for future changes, I use ttl strategy (time to live). This data will be keep until ttl is expired.
+ * I have build custom in memory cache library. This library support ttl in second,
+ * so if I want keep data for 1 days then in second 60*60*24 = 86400
+ */
 
 app.get('/characters', async ( req, res ) => {
     try {
@@ -51,7 +62,9 @@ app.get('/characters/:id', async (req, res) => {
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // start the express server
-app.listen( port, () => {
+const server = app.listen( port, () => {
     // tslint:disable-next-line:no-console
     console.log( `server started at http://localhost:${ port }` );
 } );
+
+export default server;

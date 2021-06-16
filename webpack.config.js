@@ -17,11 +17,7 @@ module.exports = {
         }]
     },
     resolve: {
-        extensions: ['.ts', '.js', '.tsx'],
-        alias: {
-            "@services": path.resolve(__dirname, 'src/services/'),
-            "@lib": path.resolve(__dirname, 'src/lib/')
-        }    
+        extensions: ['.ts', '.js', '.tsx']
     },
     output: {
         filename: 'index.js',
