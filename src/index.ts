@@ -1,7 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
-import MarvelService, { requestDefault } from "./services/marvel.service";
-import MemoryCache from "./lib/cache";
+import MarvelService, { requestDefault } from "@services/marvel.service";
+import MemoryCache from "@lib/cache";
 import swaggerUi from 'swagger-ui-express';
 import YAML from 'yamljs';
 dotenv.config();

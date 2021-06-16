@@ -1,6 +1,7 @@
 
 import axios from 'axios';
 import crypto from 'crypto';
+import { pick } from 'lodash';
 
 interface ReqOptions  {
     limit?:number | string;
@@ -28,7 +29,7 @@ export default class MarvelService {
             const { limit, offset } = {...requestDefault, ...options }
             const res =  await axios.get(`${this.baseUrl}/v1/public/characters?limit=${limit}&offset=${offset}&${this.authPath()}`);
             const results = res?.data?.data?.results;
-            return results?.map((char:any) => char.id)
+            return results?.map((char:any) => char.id) || []
         } catch (error) {
             throw (error)
         }
@@ -38,11 +39,7 @@ export default class MarvelService {
         try {
             const res =  await axios.get(`${this.baseUrl}/v1/public/characters/${id}?${this.authPath()}`);
             const result = res?.data?.data?.results[0];
-            return {
-                id: result?.id,
-                name: result?.name,
-                description: result?.description
-            };
+            return pick(result, ['id', 'name', 'description']);
         } catch (error) {
             throw (error)
         }
