@@ -2,13 +2,16 @@ import express from "express";
 import dotenv from "dotenv";
 import MarvelService, { requestDefault } from "./services/marvel.service";
 import MemoryCache from "./lib/cache";
-
+import swaggerUi from 'swagger-ui-express';
+import YAML from 'yamljs';
 dotenv.config();
 
 const app = express();
 const port = process.env.SERVER_PORT; // default port to listen
 
 const marvelService = new MarvelService();
+
+const swaggerDocument = YAML.load('./swagger.yaml');
 
 app.get('/', (req, res) => {
     res.send('Demo Marvel API')
@@ -31,19 +34,21 @@ app.get('/characters', async ( req, res ) => {
         memCache.set(cacheKey, {ttl: 86400, data: marvelRes })
         res.json({ data: marvelRes });
     } catch (error) {
-        res.status(500).json({error: error.message})
+        res.status(500).json({error: { code: 500, message: error.message }})
     }
 } );
 
-app.get('/character/:id', async (req, res) => {
+app.get('/characters/:id', async (req, res) => {
     try {
        const { id } = req.params;
        const marvelRes  = await marvelService.character(id);
        res.json({data: marvelRes})
     } catch (error) {
-        res.status(500).json({error: error.message})
+        res.status(500).json({error: { code: 500, message: error.message }})
     }
-})
+});
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // start the express server
 app.listen( port, () => {
