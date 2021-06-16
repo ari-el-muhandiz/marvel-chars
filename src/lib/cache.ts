@@ -13,7 +13,7 @@ export default class MemoryCache {
         this.store = {};
     }
 
-    public set(key: string, data: CacheObjectInterface) {
+    public set(key: string, data: CacheObjectInterface):void {
         if(data.ttl) {
             // set expiredIn if ttl available
             data.expiredIn = Date.now() + (data.ttl * 1000);
@@ -21,7 +21,7 @@ export default class MemoryCache {
         this.store[key] = data
     }
 
-    public get(key:string) {
+    public get(key:string):CacheObjectInterface {
         const result = this.store[key];
         // delete cache if expired
         if (result && result.expiredIn && Date.now() >= result.expiredIn) {

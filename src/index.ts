@@ -25,7 +25,7 @@ app.get('/characters', async ( req, res ) => {
         const cacheKey = `chars-${offset||requestDefault.limit}-${limit||requestDefault.limit}`;
         if ( memCache.get(cacheKey)) {
             // tslint:disable-next-line:no-console
-            console.log('cache hit')
+            console.log('cache hit');
             return res.json({ data: memCache.get(cacheKey)?.data });
         }
         // tslint:disable-next-line:no-console
