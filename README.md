@@ -8,7 +8,7 @@ Install dependencies using
 yarn install
 ```
 
-Create .env file in root that consist of:
+Create secret.env file in root that consist of:
 ```
 NODE_ENV=development
 SERVER_PORT=8080
